@@ -28,21 +28,18 @@ public class FileTools {
 
 			while ((sCurrentLine = br.readLine()) != null) {
 				//System.out.println(sCurrentLine);
-                                String[] parts = sCurrentLine.split("\t");
+                                String[] parts = sCurrentLine.split(",'");
                                 
                                 String key = parts[0]; 
-                                String part2 = parts[1]; 
-                                part2=part2.replaceAll("\\s+", "_").toLowerCase();
-                                corpus.put(key, part2);
-//                                if(corpus.containsKey(key)){
-//                                    String sentences=corpus.get(key);
-//                                    sentences= sentences+" "+part2;
-//                                    corpus.put(key, sentences);
-//                                }
-//                                else{
-//                                     corpus.put(key, part2);
-//                                }
-                               
+                                String text = parts[1]; 
+                                text=  text.substring(0, text.length() - 1);  
+                                // replace spaces with _
+                               // text=text.replaceAll("\\s+", "_").toLowerCase();
+                                //replace number with blankspace
+                                text=text.replaceAll("\\d+", "");
+                               // System.err.println(key + "| "+ text);
+                                corpus.put(key, text.toLowerCase());
+//                                
                                 
 			}
 

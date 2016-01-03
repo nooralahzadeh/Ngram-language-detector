@@ -5,6 +5,8 @@
  */
 package com.farhad.ngram.lang.detector.main;
 
+
+import com.farhad.ngram.lang.detector.classifier.LanguageIdentifier;
 import com.farhad.ngram.lang.detector.classifier.Learner;
 import com.farhad.ngram.lang.detector.ngram.NgramExtractor;
 import com.farhad.ngram.lang.detector.util.FileTools;
@@ -25,19 +27,28 @@ public class Main {
     public static void main(String[] args) {
         // TODO code application logic here
         
-        FileTools filetools=new  FileTools();
-        //System.out.println(filetools.readFile("/Users/farhadzn/Downloads/europarl.test.txt").get("en"));
+     //learningPhase();
+        
+        String file="/Users/farhadzn/Desktop/Hannover/test_sp.txt";
+        String mdl="/Users/farhadzn/Desktop/Hannover/NB.mdl.model";
+        LanguageIdentifier identify=new LanguageIdentifier();
+        identify.predictLanguageClass(file, mdl);
+     
         
        
         
-        Learner learner=new Learner("/Users/farhadzn/Desktop/Hannover/europarl.test.txt");
+      
+    }
+    
+      
+    public static void learningPhase(){
         
+        Learner learner=new Learner("/Users/farhadzn/Desktop/Hannover/");
+       // Learner learner=new Learner();
         try {
-            learner.evaluate();
-            learner.saveARFF("/Users/farhadzn/Desktop/Hannover/training.arff");
-            learner.learn();
-            
-            learner.saveModel("/Users/farhadzn/Desktop/Hannover/SML.mdl.txt");
+            //learner.evaluate();
+          learner.learn();
+           learner.saveModel("/Users/farhadzn/Desktop/Hannover/NB.mdl.model");
         } catch (Exception ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         }

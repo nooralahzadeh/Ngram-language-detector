@@ -54,45 +54,52 @@ public class Dataset {
             String theKey = (String) it.next();
             instance.setDataset(instances);
             instance.setValue(attribute1, theKey);
+            
             List<String> texts = (List<String>) corpus.get(theKey);
             
             
            for (String text : texts) {
-                StringBuilder txt = new StringBuilder();
-                List<String> bigrams = NgramExtractor.gramLength(2).textPadding('_').extractGrams(text);
-                
-                for (String ngram : bigrams) {
-                    txt.append(ngram);
-                    txt.append(" ");  
-                }  
-                List<String> trigrams = NgramExtractor.gramLength(3).textPadding('_').extractGrams(text);
-                for (String ngram : trigrams) {
-                    txt.append(ngram);
-                    txt.append(" ");  
-                }
-                List<String> fourgrams = NgramExtractor.gramLength(4).textPadding('_').extractGrams(text);
-
-                for (String ngram : fourgrams) {
-                    txt.append(ngram);
-                    txt.append(" ");  
-                }
-                List<String> fivegrams = NgramExtractor.gramLength(5).textPadding('_').extractGrams(text);
-               for (String ngram : fivegrams) {
-                    txt.append(ngram);
-                    txt.append(" ");  
-                }
-                txt.deleteCharAt(txt.length()-1);
+//                StringBuilder txt = new StringBuilder();
+//                List<String> unigrams = NgramExtractor.gramLength(1).textPadding('_').extractGrams(text);
+//                
+//                for (String ngram : unigrams) {
+//                    txt.append(ngram);
+//                    txt.append(" ");  
+//                }  
+//                
+//                List<String> bigrams = NgramExtractor.gramLength(2).textPadding('_').extractGrams(text);
+//                
+//                for (String ngram : bigrams) {
+//                    txt.append(ngram);
+//                    txt.append(" ");  
+//                }  
+//                List<String> trigrams = NgramExtractor.gramLength(3).textPadding('_').extractGrams(text);
+//                for (String ngram : trigrams) {
+//                    txt.append(ngram);
+//                    txt.append(" ");  
+//                }
+//                List<String> fourgrams = NgramExtractor.gramLength(4).textPadding('_').extractGrams(text);
+//
+//                for (String ngram : fourgrams) {
+//                    txt.append(ngram);
+//                    txt.append(" ");  
+//                }
+//                List<String> fivegrams = NgramExtractor.gramLength(5).textPadding('_').extractGrams(text);
+//               for (String ngram : fivegrams) {
+//                    txt.append(ngram);
+//                    txt.append(" ");  
+//                }
+               // txt.deleteCharAt(txt.length()-1);
                 
              
                 
-                instance.setValue(attribute2, txt.toString());
-                // System.out.println(instance);
+                instance.setValue(attribute2, text);
+               // System.out.println(instance);
                 instances.add(instance);
             }
         }
-
-//        System.out.println("===== Instance created with reference dataset =====");
-//        System.out.println(instances);
+        System.out.println("===== Instance created with reference dataset =====");
+        //System.out.println(instances);
     return instances;   
 
     }
