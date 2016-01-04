@@ -7,8 +7,10 @@ package com.farhad.ngram.lang.detector.dataset;
 
 import com.farhad.ngram.lang.detector.ngram.NgramExtractor;
 import java.io.BufferedReader;
+import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -19,11 +21,18 @@ import java.util.Map;
  */
 public class DocumentProfile {
 
-    String text;
+    public DocumentProfile(int n) {
+        this.ngram=n;
+    }
+
+   String text;
+   int ngram;
+   public  Map<String, Double> vector;
 
     public void load(String fileName) {
         try {
-            BufferedReader reader = new BufferedReader(new FileReader(fileName));
+             BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(fileName), "UTF8"));
+          
             String line;
             text = "";
             while ((line = reader.readLine()) != null) {
@@ -42,27 +51,27 @@ public class DocumentProfile {
         }
     }
 
-    public Map<String, Double> toVector(String text) {
-        Map<String, Double> vector = new HashMap<>();
-        Map<String, Integer> unigrams = NgramExtractor.gramLength(1).textPadding('_').extractCountedGrams(text);
-        Map<String, Integer> bigrams = NgramExtractor.gramLength(2).textPadding('_').extractCountedGrams(text);
-        Map<String, Integer> trigrams = NgramExtractor.gramLength(3).textPadding('_').extractCountedGrams(text);
-        Map<String, Integer> fourgrams = NgramExtractor.gramLength(4).textPadding('_').extractCountedGrams(text);
-        Map<String, Integer> fivegrams = NgramExtractor.gramLength(4).textPadding('_').extractCountedGrams(text);
+    public  void toVector() {
+        vector = new HashMap<>();
+        
+         Map<String, Integer>  grams=new HashMap<>();
+                for(int n=1;n<=ngram;n++){
+                    
+                    grams.putAll( NgramExtractor.gramLength(n).textPadding('_').extractCountedGrams(text));
+                     
+                }
+       
+       
 
-        unigrams.putAll(bigrams);
-        unigrams.putAll(trigrams);
-        unigrams.putAll(fourgrams);
-        unigrams.putAll(fivegrams);
-
-        Iterator<String> it = unigrams.keySet().iterator();
+        Iterator<String> it = grams.keySet().iterator();
 
         while (it.hasNext()) {
-            int N = unigrams.keySet().size();
-            double f = (double) unigrams.get(it) / N;
-            vector.put(it.next(), f);
+            int N = grams.keySet().size();
+            String key=it.next();
+            double f = (double) grams.get(key) / N;
+            vector.put(key, f);
         }
-        return vector;
+       
 
     }
 

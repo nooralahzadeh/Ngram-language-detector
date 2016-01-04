@@ -37,19 +37,26 @@ import weka.core.*;
  */
 public class LanguageProfile {
 
+    public LanguageProfile(int ngrams) {
+        this.ngrams=ngrams;
+    }
+
+    public LanguageProfile() {
+       
+    }
     final int MIN_TERM_FREQUENCY = 5;
-    final int MAX_DOC_FREQUENCY = 10000;
+    int Num_Docs;
+    int ngrams;
 
     FileTools filetools = new FileTools();
 
     public void construct(String path) {
         MultiValueMap corpus = filetools.readFile(path);
-        int numClass = corpus.keySet().size();
 
         Iterator<String> it = corpus.keySet().iterator();
 
         Map<String, Map> profile = new ConcurrentHashMap<>();
-         Map<String, Map> profile_tfidf = new HashMap<>();
+        Map<String, Map> profile_tfidf = new HashMap<>();
 
         //iterate over each class
         while (it.hasNext()) {
@@ -57,7 +64,7 @@ public class LanguageProfile {
             String theKey = (String) it.next();
 
             List<String> texts = (List<String>) corpus.get(theKey);
-
+            Num_Docs = texts.size();
             Map<Integer, Map> ngrams_lang = new HashMap<Integer, Map>();
 
             Map<String, MyPair> ngrams_profile = new ConcurrentHashMap<>();
@@ -66,18 +73,14 @@ public class LanguageProfile {
             for (int i = 0; i < texts.size(); i++) {
 
                 String text = texts.get(i);
-
-                Map<String, Integer> unigrams = NgramExtractor.gramLength(1).textPadding('_').extractCountedGrams(text);
-                Map<String, Integer> bigrams = NgramExtractor.gramLength(2).textPadding('_').extractCountedGrams(text);
-                Map<String, Integer> trigrams = NgramExtractor.gramLength(3).textPadding('_').extractCountedGrams(text);
-                Map<String, Integer> fourgrams = NgramExtractor.gramLength(4).textPadding('_').extractCountedGrams(text);
-                Map<String, Integer> fivegrams = NgramExtractor.gramLength(4).textPadding('_').extractCountedGrams(text);
-
-                unigrams.putAll(bigrams);
-                unigrams.putAll(trigrams);
-                unigrams.putAll(fourgrams);
-                unigrams.putAll(fivegrams);
-                ngrams_lang.put(i, unigrams);
+                Map<String, Integer>  grams=new HashMap<>();
+                for(int n=1;n<=ngrams;n++){
+                    
+                    grams.putAll( NgramExtractor.gramLength(n).textPadding('_').extractCountedGrams(text));
+                     
+                }
+                
+                ngrams_lang.put(i, grams);
 
             }
 
@@ -115,7 +118,10 @@ public class LanguageProfile {
         Iterator<String> p_it = profile.keySet().iterator();
 
         while (p_it.hasNext()) {
+
             String lang = p_it.next();
+            List<String> texts = (List<String>) corpus.get(lang);
+            Num_Docs = texts.size();
 
             Map<String, MyPair> ngram = profile.get(lang);
 
@@ -123,85 +129,78 @@ public class LanguageProfile {
             while (ngram_it.hasNext()) {
                 String key = ngram_it.next();
                 MyPair freq = ngram.get(key);
-                if (freq.getFirst() <= MIN_TERM_FREQUENCY | freq.getSecond() >= MAX_DOC_FREQUENCY) {
+                if (freq.getFirst() <= MIN_TERM_FREQUENCY | freq.getSecond() >= Num_Docs) {
                     ngram.remove(key);
                 }
 
             }
 
         }
-        
+
         //computer the tf-idf for each n-gram 
         p_it = profile.keySet().iterator();
-        
+
         while (p_it.hasNext()) {
             String lang = p_it.next();
+            List<String> texts = (List<String>) corpus.get(lang);
+            Num_Docs = texts.size();
 
             Map<String, MyPair> ngram = profile.get(lang);
-            
-            int N=ngram.keySet().size();
-            
+
+            int N = ngram.keySet().size();
+
             Iterator<String> ngram_it = ngram.keySet().iterator();
-            Map<String, Double> ngram_tfidf=new HashMap<>();
-          
+            Map<String, Double> ngram_tfidf = new HashMap<>();
+
             while (ngram_it.hasNext()) {
-                
+
                 String key = ngram_it.next();
                 MyPair freq = ngram.get(key);
-               
-                double tf=(double)freq.getFirst()/N;
-                        
-                double idf=Math.log((double) MAX_DOC_FREQUENCY / freq.getSecond());
-                double tfidf=tf*idf;
+
+                double tf = (double) freq.getFirst() / N;
+
+                double idf = Math.log((double) Num_Docs / freq.getSecond());
+                double tfidf = tf * idf;
                 ngram_tfidf.put(key, tfidf);
 
             }
-           // profile_tfidf.put(lang, ngram_tfidf);
-            
             //write the language profile 
-            String filename=lang+".profile";
+            String filename = lang + ".profile";
             saveProfile(filename, ngram_tfidf);
-           
         }
-        
-      
-        
-        
+    }
+
+    public void saveProfile(String filename, Map ngram_tfidf) {
+        ObjectOutputStream out;
+
+        try {
+            out = new ObjectOutputStream(new FileOutputStream(filename));
+            out.writeObject(ngram_tfidf);
+            out.close();
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(LanguageProfile.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(LanguageProfile.class.getName()).log(Level.SEVERE, null, ex);
+        }
 
     }
-    
-    public void saveProfile(String filename,  Map ngram_tfidf ){
-         ObjectOutputStream out;
-           
-            try {
-                out = new ObjectOutputStream(new FileOutputStream(filename));
-                out.writeObject(ngram_tfidf);
-                out.close();
-            } catch (FileNotFoundException ex) {
-                Logger.getLogger(LanguageProfile.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (IOException ex) {
-                Logger.getLogger(LanguageProfile.class.getName()).log(Level.SEVERE, null, ex);
-            }
 
-        
-    }
-    
-   public   Map<String,Double>  loadProfile(String lang) {
-        String filename=lang+".profile";
-         Map<String,Double> mapInFile=new HashMap<>();
-    try{
-        File toRead=new File(filename);
-        FileInputStream fis=new FileInputStream(toRead);
-        ObjectInputStream ois=new ObjectInputStream(fis);
+    public Map<String, Double> loadProfile(String profilePath) {
 
-         mapInFile=(HashMap<String,Double>)ois.readObject();
+        Map<String, Double> mapInFile = new HashMap<>();
+        try {
+            File toRead = new File(profilePath);
+            FileInputStream fis = new FileInputStream(toRead);
+            ObjectInputStream ois = new ObjectInputStream(fis);
 
-        ois.close();
-        fis.close();
-        
-     
-    }catch(Exception e){}
-      return mapInFile;
+            mapInFile = (HashMap<String, Double>) ois.readObject();
+
+            ois.close();
+            fis.close();
+
+        } catch (Exception e) {
+        }
+        return mapInFile;
     }
 
 }
