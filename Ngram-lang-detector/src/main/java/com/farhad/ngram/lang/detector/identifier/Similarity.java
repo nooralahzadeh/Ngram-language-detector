@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.farhad.ngram.lang.detector.classifier;
+package com.farhad.ngram.lang.detector.identifier;
 
 import com.farhad.ngram.lang.detector.dataset.DocumentProfile;
 import com.farhad.ngram.lang.detector.dataset.LanguageProfile;
@@ -29,7 +29,7 @@ public class Similarity {
     Map<String,Map> profiles=new HashMap<>();
     List<File> languages;
     FileTools tools=new FileTools();
-    DocumentProfile docProfile = new DocumentProfile(3);
+    DocumentProfile docProfile = new DocumentProfile(5);
     
    public Map<String,Double> similarities=new HashMap<>();
     
@@ -54,7 +54,6 @@ public class Similarity {
         Iterator<String> profiles_it = profiles.keySet().iterator();
         while(profiles_it.hasNext()){
             String lang=profiles_it.next();
-           
             Map<String,Double> lang_profile= profiles.get(lang);
            
             Set<String> profile_ngrams= lang_profile.keySet();

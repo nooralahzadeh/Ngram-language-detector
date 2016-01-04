@@ -56,7 +56,7 @@ public class LanguageProfile {
         Iterator<String> it = corpus.keySet().iterator();
 
         Map<String, Map> profile = new ConcurrentHashMap<>();
-        Map<String, Map> profile_tfidf = new HashMap<>();
+      
 
         //iterate over each class
         while (it.hasNext()) {
@@ -159,9 +159,9 @@ public class LanguageProfile {
 
                 double tf = (double) freq.getFirst() / N;
 
-                double idf = Math.log((double) Num_Docs / freq.getSecond());
-                double tfidf = tf * idf;
-                ngram_tfidf.put(key, tfidf);
+               // double idf = Math.log((double) Num_Docs / freq.getSecond());
+               // double tfidf = tf * idf;
+                ngram_tfidf.put(key, tf);
 
             }
             //write the language profile 

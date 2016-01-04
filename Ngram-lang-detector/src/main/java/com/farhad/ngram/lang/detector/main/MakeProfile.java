@@ -5,7 +5,7 @@
  */
 package com.farhad.ngram.lang.detector.main;
 
-import com.farhad.ngram.lang.detector.classifier.Similarity;
+import com.farhad.ngram.lang.detector.identifier.Similarity;
 import com.farhad.ngram.lang.detector.dataset.LanguageProfile;
 import java.util.Map;
 
@@ -20,12 +20,13 @@ public class MakeProfile {
      */
     public static void main(String[] args) {
         
-     //  LanguageProfile profile=new LanguageProfile(3);
-     //profile.construct("/Users/farhadzn/NetBeansProjects/Ngram-language-detector/Ngram-language-detector/Ngram-lang-detector/src/resource/langid.collection");
+    // LanguageProfile profile=new LanguageProfile(5);
+    //profile.construct("/Users/farhadzn/NetBeansProjects/Ngram-language-detector/Ngram-language-detector/Ngram-lang-detector/src/resource/langid.collection");
      identifier();
     }
     
     public static void identifier(){
+        
         String test="/Users/farhadzn/NetBeansProjects/Ngram-language-detector/Ngram-language-detector/Ngram-lang-detector/test";
         Similarity sim=new Similarity();
         sim.loadProfiles("/Users/farhadzn/NetBeansProjects/Ngram-language-detector/Ngram-language-detector/Ngram-lang-detector");
