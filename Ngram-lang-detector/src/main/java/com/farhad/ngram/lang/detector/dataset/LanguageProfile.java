@@ -76,7 +76,7 @@ public class LanguageProfile {
                 Map<String, Integer>  grams=new HashMap<>();
                 for(int n=1;n<=ngrams;n++){
                     
-                    grams.putAll( NgramExtractor.gramLength(n).textPadding('_').extractCountedGrams(text));
+                    grams.putAll( NgramExtractor.gramLength(n).extractCountedGrams(text));
                      
                 }
                 

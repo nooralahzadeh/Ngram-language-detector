@@ -54,18 +54,25 @@ public class Similarity {
         Iterator<String> profiles_it = profiles.keySet().iterator();
         while(profiles_it.hasNext()){
             String lang=profiles_it.next();
+           
             Map<String,Double> lang_profile= profiles.get(lang);
+           
             Set<String> profile_ngrams= lang_profile.keySet();
             Set<String> intersections= Sets.intersection(doc_ngrams, profile_ngrams); 
+           
             int length=intersections.size();
+            
             double[] doc_vector = new double[length];
             double[] profile_vector=new double[length];
+            
             for(int i=0;i< length;i++){
+                
                 String  ngram=(String) intersections.toArray()[i]; 
                 profile_vector[i]=lang_profile.get(ngram);
                 doc_vector[i]=doc.get(ngram);
              }
-              double sim=cosineSimilarity(doc_vector,profile_vector) ; 
+            
+             double sim=cosineSimilarity(doc_vector,profile_vector) ; 
               similarities.put(lang, sim);
             }
             
@@ -81,6 +88,7 @@ public class Similarity {
         double cosineSimilarity = 0.0;
 
         for (int i = 0; i < docVector1.length; i++) //docVector1 and docVector2 must be of same length
+        
         {
             dotProduct += docVector1[i] * docVector2[i];  //a.b
             magnitude1 += Math.pow(docVector1[i], 2);  //(a^2)
@@ -91,6 +99,8 @@ public class Similarity {
         magnitude2 = Math.sqrt(magnitude2);//sqrt(b^2)
 
         if (magnitude1 != 0.0 | magnitude2 != 0.0) {
+            System.err.println(dotProduct + " "+ magnitude1+ " * " +magnitude2);
+            
             cosineSimilarity = dotProduct / (magnitude1 * magnitude2);
         } else {
             return 0.0;

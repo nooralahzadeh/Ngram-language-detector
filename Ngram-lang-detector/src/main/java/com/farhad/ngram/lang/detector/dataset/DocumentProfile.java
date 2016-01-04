@@ -45,6 +45,7 @@ public class DocumentProfile {
             //replace number with blankspace
             text = text.replaceAll("\\p{Punct}+", "");
             text = text.replaceAll("\\d+", "");
+            text = text.replaceAll("\\s+", " ");
             System.out.println(text);
         } catch (IOException e) {
             System.out.println("Problem found when reading: " + fileName);
@@ -56,8 +57,7 @@ public class DocumentProfile {
         
          Map<String, Integer>  grams=new HashMap<>();
                 for(int n=1;n<=ngram;n++){
-                    
-                    grams.putAll( NgramExtractor.gramLength(n).textPadding('_').extractCountedGrams(text));
+                    grams.putAll( NgramExtractor.gramLength(n).extractCountedGrams(text));
                      
                 }
        

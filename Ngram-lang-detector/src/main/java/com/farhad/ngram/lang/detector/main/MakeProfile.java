@@ -20,9 +20,9 @@ public class MakeProfile {
      */
     public static void main(String[] args) {
         
-        // LanguageProfile profile=new LanguageProfile(3);
-        // profile.construct("/Users/farhadzn/NetBeansProjects/Ngram-language-detector/Ngram-language-detector/Ngram-lang-detector/src/resource/langid.collection");
-      identifier();
+     //  LanguageProfile profile=new LanguageProfile(3);
+     //profile.construct("/Users/farhadzn/NetBeansProjects/Ngram-language-detector/Ngram-language-detector/Ngram-lang-detector/src/resource/langid.collection");
+     identifier();
     }
     
     public static void identifier(){

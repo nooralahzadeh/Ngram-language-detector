@@ -48,6 +48,7 @@ public class FileTools {
                 //replace number and punctuations with blankspace
                 text = text.replaceAll("\\p{Punct}+", "");
                 text = text.replaceAll("\\d+", "");
+                text = text.replaceAll("\\s+", " ");
                 // System.err.println(key + "| "+ text);
 
                 corpus.put(key, text.toLowerCase());
