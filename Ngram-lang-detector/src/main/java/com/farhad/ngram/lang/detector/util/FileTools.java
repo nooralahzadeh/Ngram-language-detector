@@ -6,8 +6,10 @@
 package com.farhad.ngram.lang.detector.util;
 
 import java.io.BufferedReader;
+import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Map;
 import org.apache.commons.collections4.map.MultiValueMap;
@@ -21,8 +23,10 @@ public class FileTools {
     public MultiValueMap readFile(String path){
         //Map<String, String> corpus=new HashMap<>();
         MultiValueMap corpus=new  MultiValueMap();
-       try (BufferedReader br = new BufferedReader(new FileReader(path)))
-		{
+        
+       try {
+               BufferedReader br = new BufferedReader(new InputStreamReader( new FileInputStream(path), "UTF8"));
+	
 
 			String sCurrentLine;
 
@@ -35,9 +39,11 @@ public class FileTools {
                                 text=  text.substring(0, text.length() - 1);  
                                 // replace spaces with _
                                // text=text.replaceAll("\\s+", "_").toLowerCase();
-                                //replace number with blankspace
+                                //replace number and punctuations with blankspace
+                                text=text.replaceAll("\\p{Punct}+", "");
                                 text=text.replaceAll("\\d+", "");
                                // System.err.println(key + "| "+ text);
+                                
                                 corpus.put(key, text.toLowerCase());
 //                                
                                 
