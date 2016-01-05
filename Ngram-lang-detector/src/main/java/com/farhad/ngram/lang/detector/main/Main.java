@@ -23,49 +23,59 @@ public class Main {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-       
-         Main m= new Main();
+
+        Main m = new Main();
      //make the profile for each language based on the corpus in resources
-    
+
      //   m.profiler();
-        
-     // identify the language for the document   
+        // identify the language for the document   
         String document;
-        if(args.length > 0) {
-            
-            document=args[0];
-            
-        }else{
-            
-           File file = new File("src/test/test_sp.txt");
-           document = file.getAbsolutePath();
-           
+        if (args.length > 0) {
+
+            document = args[0];
+
+        } else {
+
+            File file = new File("src/test/test_sp.txt");
+            document = file.getAbsolutePath();
+
         }
-        
-     m.identifier(document);
+
+        m.identifier(document);
     }
-    
-    public  void identifier(String documentFile){
-        
-         
-        Similarity sim=new Similarity();
+
+    public void identifier(String documentFile) {
+
+        Similarity sim = new Similarity();
         ClassLoader classLoader = getClass().getClassLoader();
         File file = new File(classLoader.getResource("langid.collection").getFile());
-        
-        String resources=file.getParentFile().getAbsolutePath();
-         
+
+        String resources = file.getParentFile().getAbsolutePath();
+
         sim.loadProfiles(resources);
         sim.similarity(documentFile);
-        System.out.println("The most likely language for this document is : "+ sim.getLanguage());
-        
+        String language="ENGLISH";
+        switch (sim.getLanguage()) {
+            case "EN":
+                language = "ENGLISH";
+                break;
+            case "FR":
+                language = "FRENCH";
+                break;
+            case "SP":
+                language = "SPANISH";
+                
+                break;
+        }
+        System.out.println("The most likely language for this document is : " + language);
+
     }
-    
-    
-     public  void profiler(){
-        LanguageProfile profile=new LanguageProfile(5);
+
+    public void profiler() {
+        LanguageProfile profile = new LanguageProfile(5);
         ClassLoader classLoader = getClass().getClassLoader();
         File file = new File(classLoader.getResource("langid.collection").getFile());
         profile.construct(file.getAbsolutePath());
-     }
-    
+    }
+
 }
