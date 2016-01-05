@@ -5,21 +5,14 @@
  */
 package com.farhad.ngram.lang.detector.ngram;
 
-/**
- *
- * @author farhadzn
- */
+ 
 public class NgramExtractors {
 
     private static final NgramExtractor STANDARD = NgramExtractor
             .gramLengths(1, 2, 3)
             .filter(StandardNgramFilter.getInstance())
             .textPadding(' ');
-
-    private static final NgramExtractor BACKWARDS = NgramExtractor
-            .gramLengths(1, 2, 3)
-            .filter(BackwardsCompatibleNgramFilter.getInstance())
-            .textPadding(' ');
+ 
 
 
     /**
@@ -29,11 +22,6 @@ public class NgramExtractors {
         return STANDARD;
     }
 
-    /**
-     * The old way of doing n-grams.
-     */
-    public static NgramExtractor backwards() {
-        return BACKWARDS;
-    }
+     
 
 }

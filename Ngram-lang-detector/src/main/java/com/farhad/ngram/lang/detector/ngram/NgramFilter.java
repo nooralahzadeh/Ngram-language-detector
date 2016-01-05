@@ -5,10 +5,7 @@
  */
 package com.farhad.ngram.lang.detector.ngram;
 
-/**
- *
- * @author farhadzn
- */
+ 
 
 public interface NgramFilter {
 

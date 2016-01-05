@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.farhad.ngram.lang.detector.dataset;
+package com.farhad.ngram.lang.detector.profile;
 
 import com.farhad.ngram.lang.detector.ngram.NgramExtractor;
 import java.io.BufferedReader;
@@ -40,13 +40,15 @@ public class DocumentProfile {
             }
 
             reader.close();
-
+           
+            System.out.println("The document text is : "+text);
+            
             text = text.toLowerCase();
             //replace number with blankspace
             text = text.replaceAll("\\p{Punct}+", "");
             text = text.replaceAll("\\d+", "");
             text = text.replaceAll("\\s+", " ");
-            System.out.println(text);
+            
         } catch (IOException e) {
             System.out.println("Problem found when reading: " + fileName);
         }

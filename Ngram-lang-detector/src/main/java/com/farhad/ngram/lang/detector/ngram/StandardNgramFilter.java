@@ -9,7 +9,6 @@ package com.farhad.ngram.lang.detector.ngram;
 /**
  * Filters what is generally not desired.
  * 
- * @author farhadzn
  */
 public class StandardNgramFilter implements NgramFilter {
 

@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.farhad.ngram.lang.detector.dataset;
+package com.farhad.ngram.lang.detector.profile;
 
 import com.farhad.ngram.lang.detector.ngram.NgramExtractor;
 import com.farhad.ngram.lang.detector.util.FileTools;
@@ -42,8 +42,9 @@ public class LanguageProfile {
     }
 
     public LanguageProfile() {
-       
+        
     }
+    
     final int MIN_TERM_FREQUENCY = 5;
     int Num_Docs;
     int ngrams;
@@ -137,7 +138,7 @@ public class LanguageProfile {
 
         }
 
-        //computer the tf-idf for each n-gram 
+        //computer the term frequecny for each n-gram 
         p_it = profile.keySet().iterator();
 
         while (p_it.hasNext()) {
@@ -158,12 +159,10 @@ public class LanguageProfile {
                 MyPair freq = ngram.get(key);
 
                 double tf = (double) freq.getFirst() / N;
-
-               // double idf = Math.log((double) Num_Docs / freq.getSecond());
-               // double tfidf = tf * idf;
                 ngram_tfidf.put(key, tf);
 
             }
+            
             //write the language profile 
             String filename = lang + ".profile";
             saveProfile(filename, ngram_tfidf);

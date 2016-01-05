@@ -5,8 +5,8 @@
  */
 package com.farhad.ngram.lang.detector.identifier;
 
-import com.farhad.ngram.lang.detector.dataset.DocumentProfile;
-import com.farhad.ngram.lang.detector.dataset.LanguageProfile;
+import com.farhad.ngram.lang.detector.profile.DocumentProfile;
+import com.farhad.ngram.lang.detector.profile.LanguageProfile;
 import com.farhad.ngram.lang.detector.util.FileTools;
 import com.google.common.collect.HashBiMap;
 import com.google.common.collect.Sets;
@@ -49,7 +49,7 @@ public class Similarity {
         docProfile.toVector();
         
         Map<String,Double> doc=docProfile.vector;
-        System.err.println(doc);
+      
         Set<String> doc_ngrams=doc.keySet();
         Iterator<String> profiles_it = profiles.keySet().iterator();
         while(profiles_it.hasNext()){
@@ -74,12 +74,24 @@ public class Similarity {
              double sim=cosineSimilarity(doc_vector,profile_vector) ; 
               similarities.put(lang, sim);
             }
-            
-            
+
             
         }
         
-        
+   public String getLanguage(){
+       
+       Map.Entry<String, Double> maxEntry = null;
+
+        for (Map.Entry<String, Double> entry : similarities.entrySet())
+        {
+            if (maxEntry == null || entry.getValue().compareTo(maxEntry.getValue()) > 0)
+            {
+                maxEntry = entry;
+            }
+        }
+        return maxEntry.getKey();
+       
+   }     
    public double cosineSimilarity(double[] docVector1, double[] docVector2) {
         double dotProduct = 0.0;
         double magnitude1 = 0.0;
@@ -98,7 +110,6 @@ public class Similarity {
         magnitude2 = Math.sqrt(magnitude2);//sqrt(b^2)
 
         if (magnitude1 != 0.0 | magnitude2 != 0.0) {
-            System.err.println(dotProduct + " "+ magnitude1+ " * " +magnitude2);
             
             cosineSimilarity = dotProduct / (magnitude1 * magnitude2);
         } else {

@@ -6,9 +6,6 @@
 package com.farhad.ngram.lang.detector.ngram;
 
 /**
- *
- * @author farhadzn
- * 
  * Class for extracting n-grams out of a text.
  *
  *
